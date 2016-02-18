@@ -158,7 +158,7 @@ end;
 
 % creating a file
 fileID = fopen('audio_GMM.txt', 'at');
-formatSpec = '%s %d %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f\n';
+formatSpec = '%s %d %f\n';
   
 for i= 1 : length(test_data)
   for k= 1 : 31
@@ -168,7 +168,7 @@ for i= 1 : length(test_data)
   % final class decision  
   [maximum_ll, index] = max(ll);
   
-  fprintf(fileID,formatSpec, file_name{i}{1},index,ll(1),ll(2),ll(3),ll(4),ll(5),ll(6),ll(7),ll(8),ll(9),ll(10),ll(11),ll(12),ll(13),ll(14),ll(15),ll(16),ll(17),ll(18),ll(19),ll(20),ll(21),ll(22),ll(23),ll(24),ll(25),ll(26),ll(27),ll(28),ll(29),ll(30),ll(31));                
+  fprintf(fileID, formatSpec, file_name{i}{1}, index, maximum_ll);                
 end;                                  
 
 fclose(fileID);
