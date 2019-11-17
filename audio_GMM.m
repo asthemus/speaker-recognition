@@ -14,7 +14,7 @@ d1 = 'train/';
 d2 = 'dev/';
 
 % reading the training data
-for i= 1 : 31
+for i= 1 : 10
   dir_name1 = strcat(d1, num2str(i), '/*.wav');
   dir_name2 = strcat(d2, num2str(i), '/*.wav');
   files = [dir([dir_name1]); dir([dir_name2])];

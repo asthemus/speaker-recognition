@@ -1,4 +1,4 @@
-function [ CPS, FBE, frames] = mfcc(S, WINDOW, NOVERLAP, Fs, NBANKS, LIFT, NCEPS, type_window, R, alpha)
+function CPS = mfcc(S, WINDOW, NOVERLAP, NFFT, Fs, NBANKS, LIFT, NCEPS, type_window, R, alpha)
 %MFCC Mel Frequency Cepstral Coefficients
 %   CPS = MFCC(s, FFTL, Fs, WINDOW, NOVERLAP, NBANKS, NCEPS) returns 
 %   NCEPS-by-M matrix of MFCC coeficients extracted form signal S, where
@@ -25,13 +25,10 @@ noise = rand(size(S));
 norm(S) / norm(noise) / 10^(SNRdB/20);
 S = S + noise * norm(S) / norm(noise) / 10^(SNRdB/20);
 
-% Explode samples to the range of 16 bit shorts
-if( max(abs(S))<=1 ), S = S * 2^15; end
-
 nfft = 2^nextpow2(WINDOW);     % length of FFT analysis 
 K = nfft/2+1;                % length of the unique part of the FFT
 
-%% HANDY INLINE FUNCTION HANDLES
+% HANDY INLINE FUNCTION HANDLES
 
 hz2mel = @( hz )( 1127*log(1+hz/700) );     % Hertz to mel warping function
 mel2hz = @( mel )( 700*exp(mel/1127)-700 ); % mel to Hertz warping function
@@ -44,7 +41,7 @@ ceplifter = @( NCEPS, LIFT )( 1+0.5*LIFT*sin(pi*[0:NCEPS-1]/LIFT) );
 
 %% FEATURE EXTRACTION 
 
-S = filter( [1 -alpha], 1, S ); % fvtool( [1 -alpha], 1 ); First order FIR Filter
+S = filter( [1 -alpha], 1, speech ); % fvtool( [1 -alpha], 1 ); First order FIR Filter
 
 % Framing and windowing (frames as columns)
 frames = vec2frames(S, WINDOW, NOVERLAP, 'cols', type_window, false );
