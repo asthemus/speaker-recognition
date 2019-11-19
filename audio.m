@@ -104,7 +104,7 @@ end
 for i= 1 : 10
     disp(strcat('feature extranction for id', int2str(i)));
   for j= 1 : length(signals{i})
-    [features{j},~,~] = mfcc(signals{i}{j}, 400, 240, Fs, 23, l, nceps, hamming(64), R, alpha);
+    [features{j},~,~] = mfcc(signals{i}{j}, 400, 240, Fs, 23, l, nceps, @hamming, R, alpha);
   end
   train_data{i} = cell2mat(features);
 end

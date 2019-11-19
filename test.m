@@ -24,6 +24,7 @@ end
 
 crop = 8000;
 frame_length = 2400;
+dataMode = 1;
 threshold = 0.01;
 x = 1;
 
@@ -49,7 +50,7 @@ end
 
 % % MFCC feature extraction
 for i= 1 : length(test_signals)
-  test_data{i} = mfcc(test_signals{i}, 400, 240, Fs, 23, l, nceps, hamming(64), R, alpha);
+  test_data{i} = mfcc(test_signals{i}, 400, 240, Fs, 23, l, nceps, @hamming, R, alpha);
 end
 
 % get posterior
@@ -61,13 +62,16 @@ for i=1:length(test_data)
         p = [p, pdf(GMModel{k}, transpose(test_data{i}))];% P(x|model_i)
     end
     [~, cIdx] = max(p,[],2); 
+    
+    
     figure
     step = Fs * 10 / 1000;
-    subplot(2, 1, 1)
-    plot(1:step:step*size(cIdx, 1), p);
-    legend('class 1', 'class 2','class 3', 'class 4','class 5', 'class 6','class 7', 'class 8','class 9', 'class 10');
-    subplot(2, 1, 2)
+    
     plot(test_signals{i} + 1.5);
+    
+    %calculating speaker from freq
+    datamode = mode(cIdx);
+    disp(strcat('speaker speaking is',{' '},int2str(dataMode)));
 end
 
 % argmax_i P(x|model_i)
